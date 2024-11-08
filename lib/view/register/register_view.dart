@@ -29,6 +29,11 @@ class _RegisterViewState extends State<RegisterView> {
               style: theme.textTheme.titleLarge!.copyWith(
                 color: theme.colorScheme.onSurface,
               ),
+            ), Text(
+              "Please fill in the form to continue",
+              style: theme.textTheme.labelLarge!.copyWith(
+                color: theme.colorScheme.onSurface.withOpacity(.5),
+              ),
             ),
             const Gap(40),
             CustomTextFormfield(

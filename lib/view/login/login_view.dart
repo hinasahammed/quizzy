@@ -24,12 +24,18 @@ class _LoginViewState extends State<LoginView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Hi, Welcome back",
+              "Welcome back",
               style: theme.textTheme.titleLarge!.copyWith(
                 color: theme.colorScheme.onSurface,
               ),
             ),
-            const Gap(20),
+            Text(
+              "Please sigin to your account",
+              style: theme.textTheme.labelLarge!.copyWith(
+                color: theme.colorScheme.onSurface.withOpacity(.5),
+              ),
+            ),
+            const Gap(40),
             CustomTextFormfield(
               controller: numberController,
               fieldTitle: "Phone number",

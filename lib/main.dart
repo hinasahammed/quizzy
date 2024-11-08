@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quizzy/view/login/login_view.dart';
+import 'package:quizzy/view/bottomNavigation/custom_bottom_navigation.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const LoginView(),
+      home: const CustomBottomNavigation(),
     );
   }
 }
