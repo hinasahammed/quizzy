@@ -17,6 +17,7 @@ class _RegisterViewState extends State<RegisterView> {
   final nameController = TextEditingController();
   final numberController = TextEditingController();
   final passwordController = TextEditingController();
+  final _fomrKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -25,78 +26,117 @@ class _RegisterViewState extends State<RegisterView> {
       body: SafeArea(
           child: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Create acccount",
-              style: theme.textTheme.titleLarge!.copyWith(
-                color: theme.colorScheme.onSurface,
+        child: Form(
+          key: _fomrKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Create acccount",
+                style: theme.textTheme.titleLarge!.copyWith(
+                  color: theme.colorScheme.onSurface,
+                ),
               ),
-            ),
-            Text(
-              "Please fill in the form to continue",
-              style: theme.textTheme.labelLarge!.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(.5),
+              Text(
+                "Please fill in the form to continue",
+                style: theme.textTheme.labelLarge!.copyWith(
+                  color: theme.colorScheme.onSurface.withOpacity(.5),
+                ),
               ),
-            ),
-            const Gap(40),
-            CustomTextFormfield(
-              controller: nameController,
-              fieldTitle: "Name",
-            ),
-            const Gap(20),
-            CustomTextFormfield(
-              controller: numberController,
-              fieldTitle: "Phone number",
-              prefix: const Text("+91"),
-            ),
-            const Gap(20),
-            CustomTextFormfield(
-              controller: passwordController,
-              fieldTitle: "Password",
-            ),
-            const Gap(50),
-            SizedBox(
-              height: 50,
-              width: double.infinity,
-              child: CustomButton(
-                onPressed: () {
-                  authcontroller.registerUser(
-                    context,
-                    nameController.text,
-                    numberController.text,
-                    passwordController.text,
-                  );
+              const Gap(40),
+              CustomTextFormfield(
+                controller: nameController,
+                validator: (name) {
+                  if (name == null || name.isEmpty) {
+                    return "Enter Username";
+                  }
+                  if (name.length < 3) {
+                    return "Too Short";
+                  }
+                  return null;
                 },
-                btnText: "Create account",
+                fieldTitle: "Name",
               ),
-            ),
-            const Gap(50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Already have an account?",
-                  style: theme.textTheme.labelLarge!.copyWith(
-                    color: theme.colorScheme.onSurface,
-                  ),
-                ),
-                TextButton(
+              const Gap(20),
+              CustomTextFormfield(
+                controller: numberController,
+                keyboardType: TextInputType.number,
+                validator: (phonenumber) {
+                  if (phonenumber == null || phonenumber.isEmpty) {
+                    return "Enter phone number";
+                  }
+                  if (phonenumber.length < 10) {
+                    return "Enter valid phonenumber";
+                  }
+                  return null;
+                },
+                fieldTitle: "Phone number",
+                prefix: const Text("+91"),
+              ),
+              const Gap(20),
+              CustomTextFormfield(
+                controller: passwordController,
+                validator: (password) {
+                  if (password == null || password.isEmpty) {
+                    return "Enter password";
+                  }
+                  if (password.length < 6) {
+                    return "Password too short";
+                  }
+                  return null;
+                },
+                fieldTitle: "Password",
+              ),
+              const Gap(50),
+              SizedBox(
+                height: 50,
+                width: double.infinity,
+                child: CustomButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginView(),
-                        ));
+                    authcontroller.registerUser(
+                      context,
+                      nameController.text,
+                      numberController.text,
+                      passwordController.text,
+                    );
                   },
-                  child: const Text("Login"),
+                  btnText: "Create account",
                 ),
-              ],
-            )
-          ],
+              ),
+              const Gap(50),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Already have an account?",
+                    style: theme.textTheme.labelLarge!.copyWith(
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginView(),
+                          ));
+                    },
+                    child: const Text("Login"),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       )),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    nameController.dispose();
+    numberController.dispose();
+    passwordController.dispose();
   }
 }
