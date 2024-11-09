@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 import 'package:quizzy/res/components/constants/custom_button.dart';
 import 'package:quizzy/res/components/constants/custom_text_formfield.dart';
+import 'package:quizzy/view/login/login_view.dart';
+import 'package:quizzy/viewmodel/provider/auth_controller.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -17,6 +20,7 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final authcontroller = Provider.of<AuthController>(context, listen: false);
     return Scaffold(
       body: SafeArea(
           child: SingleChildScrollView(
@@ -29,7 +33,8 @@ class _RegisterViewState extends State<RegisterView> {
               style: theme.textTheme.titleLarge!.copyWith(
                 color: theme.colorScheme.onSurface,
               ),
-            ), Text(
+            ),
+            Text(
               "Please fill in the form to continue",
               style: theme.textTheme.labelLarge!.copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(.5),
@@ -56,7 +61,14 @@ class _RegisterViewState extends State<RegisterView> {
               height: 50,
               width: double.infinity,
               child: CustomButton(
-                onPressed: () {},
+                onPressed: () {
+                  authcontroller.registerUser(
+                    context,
+                    nameController.text,
+                    numberController.text,
+                    passwordController.text,
+                  );
+                },
                 btnText: "Create account",
               ),
             ),
@@ -71,7 +83,13 @@ class _RegisterViewState extends State<RegisterView> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginView(),
+                        ));
+                  },
                   child: const Text("Login"),
                 ),
               ],

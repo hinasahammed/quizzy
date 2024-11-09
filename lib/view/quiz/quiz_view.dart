@@ -1,94 +1,134 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:quizzy/data/questions.dart';
+import 'package:quizzy/res/components/constants/custom_button.dart';
 
-class QuizScreen extends StatefulWidget {
-  const QuizScreen({super.key});
+class QuizView extends StatefulWidget {
+  const QuizView({super.key});
 
   @override
-  State<QuizScreen> createState() => _QuizScreenState();
+  State<QuizView> createState() => _QuizViewState();
 }
 
-class _QuizScreenState extends State<QuizScreen> {
+class _QuizViewState extends State<QuizView> {
   int _currentQuestionIndex = 0;
-  final List<String> _questions = [
-    'What is the capital of France?',
-    'What is 2 + 2?',
-    'What is the boiling point of water?'
-  ]; // Replace with SharedPreferences-loaded questions
-  final List<List<String>> _choices = [
-    ['Paris', 'London', 'Berlin', 'Madrid'],
-    ['3', '4', '5', '6'],
-    ['90°C', '100°C', '110°C', '120°C']
-  ];
+
   int? _selectedAnswerIndex;
 
   void _nextQuestion() {
-    if (_currentQuestionIndex < _questions.length - 1) {
+    if (_currentQuestionIndex < questions.length - 1) {
       setState(() {
         _currentQuestionIndex++;
         _selectedAnswerIndex = null;
       });
     } else {
-      // Submit the quiz and navigate to the results page.
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Quiz Completed!')),
       );
-      // Navigator.push to results page
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Quiz Time'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Question ${_currentQuestionIndex + 1}/${_questions.length}',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 16),
-            LinearProgressIndicator(
-              value: (_currentQuestionIndex + 1) / _questions.length,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              _questions[_currentQuestionIndex],
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(height: 24),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _choices[_currentQuestionIndex].length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(_choices[_currentQuestionIndex][index]),
-                    leading: Radio<int>(
-                      value: index,
-                      groupValue: _selectedAnswerIndex,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedAnswerIndex = value;
-                        });
-                      },
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            floating: false,
+            pinned: true,
+            snap: false,
+            title: const Text('Quiz Time'),
+            expandedHeight: 250.0,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: "Question ",
+                                  style: theme.textTheme.headlineSmall),
+                              TextSpan(
+                                  text: "${_currentQuestionIndex + 1}",
+                                  style:
+                                      theme.textTheme.headlineMedium!.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  )),
+                              TextSpan(
+                                text: "/${questions.length}",
+                                style: theme.textTheme.headlineSmall!.copyWith(
+                                  color: theme.colorScheme.onSurface
+                                      .withOpacity(.5),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  );
-                },
+                    const Gap(10),
+                    LinearProgressIndicator(
+                      value: (_currentQuestionIndex + 1) / questions.length,
+                    ),
+                    const Gap(20),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "${_currentQuestionIndex + 1}. ${questions[_currentQuestionIndex].questionText}",
+                          style: theme.textTheme.titleLarge!.copyWith(
+                            color: theme.colorScheme.onSurface,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _selectedAnswerIndex != null ? _nextQuestion : null,
-              child: Text(_currentQuestionIndex < _questions.length - 1
-                  ? 'Next'
-                  : 'Submit'),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                ...questions[_currentQuestionIndex].choices.map(
+                      (choice) => RadioListTile<int>(
+                        title: Text(choice.choiceText),
+                        value: questions[_currentQuestionIndex]
+                            .choices
+                            .indexOf(choice),
+                        groupValue: _selectedAnswerIndex,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedAnswerIndex = value;
+                          });
+                        },
+                      ),
+                    ),
+                const Gap(40),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    height: 50,
+                    child: CustomButton(
+                      onPressed:
+                          _selectedAnswerIndex != null ? _nextQuestion : null,
+                      btnText: _currentQuestionIndex < questions.length - 1
+                          ? 'Next'
+                          : 'Submit',
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
