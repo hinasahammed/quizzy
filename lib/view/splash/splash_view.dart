@@ -11,11 +11,11 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   widget.splashServices.isUserLogedin(context);
-  // }
+  @override
+  void initState() {
+    super.initState();
+    widget.splashServices.isUserLogedin(context);
+  }
 
   @override
   Widget build(BuildContext context) {
