@@ -2,7 +2,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class Category extends StatelessWidget {
-  const Category({super.key});
+  const Category({super.key, required this.answered, required this.skipped});
+  final double answered;
+  final double skipped;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class Category extends StatelessWidget {
             x: 0,
             barRods: [
               BarChartRodData(
-                toY: 40,
+                toY: answered,
                 color: Colors.green,
                 width: 20,
               ),
@@ -26,7 +28,7 @@ class Category extends StatelessWidget {
             x: 1,
             barRods: [
               BarChartRodData(
-                toY: 20,
+                toY: skipped,
                 color: Colors.red,
                 width: 20,
               ),

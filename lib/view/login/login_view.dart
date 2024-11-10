@@ -17,6 +17,7 @@ class _LoginViewState extends State<LoginView> {
   final numberController = TextEditingController();
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -78,11 +79,19 @@ class _LoginViewState extends State<LoginView> {
                 width: double.infinity,
                 child: CustomButton(
                   onPressed: () {
-                    authcontroller.login(
-                      context,
-                      numberController.text,
-                      passwordController.text,
-                    );
+                    if (_formKey.currentState!.validate()) {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      authcontroller.login(
+                        context,
+                        numberController.text,
+                        passwordController.text,
+                      );
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
                   },
                   btnText: "Login",
                 ),

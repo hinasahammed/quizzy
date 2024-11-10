@@ -1,8 +1,7 @@
-
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
-import 'package:quizzy/view/dashboard/dashboard_view.dart';
+import 'package:quizzy/view/profile/profile_view.dart';
 import 'package:quizzy/view/home/home_view.dart';
 
 class CustomBottomNavigation extends StatefulWidget {
@@ -14,7 +13,6 @@ class CustomBottomNavigation extends StatefulWidget {
 
 class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
   int _bottomIndex = 0;
-
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +36,11 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
           ),
           CurvedNavigationBarItem(
             child: Icon(
-              Icons.dashboard,
+              Icons.person,
               color: theme.colorScheme.onPrimary,
               size: 30,
             ),
-            label: 'Dashboard',
+            label: 'Profile',
             labelStyle: theme.textTheme.labelLarge!.copyWith(
               color: theme.colorScheme.onPrimary,
             ),
@@ -58,7 +56,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
         index: _bottomIndex,
         children: const [
           HomeView(),
-          DashboardView(),
+          ProfileView(),
         ],
       ),
     );

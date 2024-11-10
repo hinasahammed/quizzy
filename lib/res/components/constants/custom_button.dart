@@ -5,9 +5,11 @@ class CustomButton extends StatelessWidget {
     super.key,
     required this.btnText,
     this.onPressed,
+    this.isloading = false,
   });
   final String btnText;
   final void Function()? onPressed;
+  final bool isloading;
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +19,16 @@ class CustomButton extends StatelessWidget {
         backgroundColor: theme.colorScheme.primary,
       ),
       onPressed: onPressed,
-      child: Text(
-        btnText,
-        style: theme.textTheme.bodyLarge!.copyWith(
-          color: theme.colorScheme.onPrimary,
-        ),
-      ),
+      child: isloading
+          ? CircularProgressIndicator(
+              color: theme.colorScheme.onPrimary,
+            )
+          : Text(
+              btnText,
+              style: theme.textTheme.bodyLarge!.copyWith(
+                color: theme.colorScheme.onPrimary,
+              ),
+            ),
     );
   }
 }

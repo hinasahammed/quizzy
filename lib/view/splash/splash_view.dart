@@ -11,11 +11,11 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
-  @override
-  void initState() {
-    super.initState();
-    widget.splashServices.isUserLogedin(context);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   widget.splashServices.isUserLogedin(context);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +27,11 @@ class _SplashViewState extends State<SplashView> {
           children: [
             Text(
               "Quizzy",
-              style: theme.textTheme.titleLarge!.copyWith(
+              style: theme.textTheme.headlineLarge!.copyWith(
                 color: theme.colorScheme.onSurface,
               ),
             ),
-            const Gap(20),
+            const Gap(50),
             const CircularProgressIndicator(),
           ],
         ),

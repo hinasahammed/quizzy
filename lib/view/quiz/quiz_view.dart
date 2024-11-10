@@ -1,8 +1,13 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 import 'package:quizzy/data/questions.dart';
+import 'package:quizzy/model/questionSummary/question_summary_model.dart';
+import 'package:quizzy/res/components/constants/custom_button.dart';
+import 'package:quizzy/view/quizResult/quiz_result_view.dart';
+import 'package:quizzy/viewmodel/provider/quiz/quiz_controller.dart';
+import 'package:uuid/uuid.dart';
 
 class QuizView extends StatefulWidget {
   const QuizView({super.key});
@@ -19,16 +24,19 @@ class _QuizViewState extends State<QuizView> {
   int unAnsweredCount = 0;
   int timerCount = 30;
   Timer? _timer;
+  late String userId;
 
   @override
   void initState() {
     super.initState();
     startQuizTimer();
+    userId = Provider.of<QuizController>(context, listen: false).fetchId();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -37,7 +45,7 @@ class _QuizViewState extends State<QuizView> {
             pinned: true,
             snap: false,
             title: const Text('Quiz Time'),
-            expandedHeight: 250.0,
+            expandedHeight: 300.0,
             flexibleSpace: FlexibleSpaceBar(
               background: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -153,6 +161,16 @@ class _QuizViewState extends State<QuizView> {
                               ),
                             ),
                           ),
+                      const Gap(20),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: CustomButton(
+                          onPressed: () {
+                            nextQuestion();
+                          },
+                          btnText: "Skip",
+                        ),
+                      )
                     ],
                   ),
                 )
@@ -180,6 +198,23 @@ class _QuizViewState extends State<QuizView> {
         unAnsweredCount = questions.length - userAnswer.length;
       });
       _timer?.cancel();
+      var summary = QuestionSummaryModel(
+        id: const Uuid().v4(),
+        userId: userId,
+        correctAnswersCount: correctAnswerCount,
+        answeredCount: answeredCount,
+        skippedCount: unAnsweredCount,
+        quizPoint: correctAnswerCount * 2,
+      );
+      Provider.of<QuizController>(context, listen: false).saveQuiz(summary);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => QuizResultView(
+            questionSummaryModel: summary,
+          ),
+        ),
+      );
     }
   }
 
@@ -204,7 +239,7 @@ class _QuizViewState extends State<QuizView> {
         setState(() {
           timerCount--;
         });
-        if (timerCount == 30) {
+        if (timerCount == 0) {
           timer.cancel();
           nextQuestion();
           resetTimer();

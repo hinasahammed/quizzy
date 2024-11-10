@@ -1,3 +1,4 @@
+import 'package:quizzy/model/questionSummary/question_summary_model.dart';
 import 'package:quizzy/model/user/user_model.dart';
 
 abstract class StorageRepository {
@@ -5,7 +6,15 @@ abstract class StorageRepository {
 
   Future addUSer(List<UserModel> user);
 
-  Future setUserLogedin(String id);
+  Future setUserLogedin(String id, String loginBool);
 
-  Future<String> getUserLogedin();
+  String getUserLogedin();
+
+  Future saveQuizSummary(QuestionSummaryModel quizSummary);
+
+  String fetchId();
+
+  UserModel fetchCurrentUser(String id);
+
+  List<QuestionSummaryModel> fetchQuizSummary(String userId);
 }

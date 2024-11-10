@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:quizzy/repository/storageRepository/storage_repository.dart';
 import 'package:quizzy/view/bottomNavigation/custom_bottom_navigation.dart';
+import 'package:quizzy/view/login/login_view.dart';
 
 class SplashServices {
   SplashServices({
@@ -12,18 +13,34 @@ class SplashServices {
 
   final StorageRepository _storageRepository;
 
-  void isUserLogedin(BuildContext context) async {
-    var userLogedin = await _storageRepository.getUserLogedin();
-    var val = jsonDecode(userLogedin);
+  void isUserLogedin(BuildContext context) {
+    var userLogedin = _storageRepository.getUserLogedin();
+
     Timer(
       const Duration(seconds: 3),
       () {
-        if (val['isLogedIn'] == "true") {
-          if (context.mounted) {
+        if (userLogedin.isEmpty) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LoginView(),
+              ));
+        } else {
+          var val = jsonDecode(userLogedin);
+
+          if (val['isLogedIn'] == "true") {
+            if (context.mounted) {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CustomBottomNavigation(),
+                  ));
+            }
+          } else {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const CustomBottomNavigation(),
+                  builder: (context) => const LoginView(),
                 ));
           }
         }

@@ -5,6 +5,9 @@ import 'package:quizzy/repository/authRepository/auth_repository.dart';
 import 'package:quizzy/repository/storageRepository/local/local_storage_repository.dart';
 import 'package:quizzy/view/splash/splash_view.dart';
 import 'package:quizzy/viewmodel/provider/auth_controller.dart';
+import 'package:quizzy/viewmodel/provider/home/home_controller.dart';
+import 'package:quizzy/viewmodel/provider/profile/profile_controller.dart';
+import 'package:quizzy/viewmodel/provider/quiz/quiz_controller.dart';
 import 'package:quizzy/viewmodel/services/splash/splash_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,8 +45,26 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AuthController(authRepository: authRepository),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => AuthController(
+            authRepository: authRepository,
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) =>
+              QuizController(storageRepository: localStorageRepository),
+        ),
+        ChangeNotifierProvider(
+          create: (context) =>
+              ProfileController(storageRepository: localStorageRepository),
+        ),
+        ChangeNotifierProvider(
+          create: (context) =>
+              HomeController(storageRepository: localStorageRepository),
+        )
+      ],
       child: MaterialApp(
         title: 'Quizzy',
         debugShowCheckedModeBanner: false,

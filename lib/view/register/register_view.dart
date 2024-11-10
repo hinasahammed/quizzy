@@ -17,6 +17,7 @@ class _RegisterViewState extends State<RegisterView> {
   final nameController = TextEditingController();
   final numberController = TextEditingController();
   final passwordController = TextEditingController();
+  bool isloading = false;
   final _fomrKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -92,13 +93,22 @@ class _RegisterViewState extends State<RegisterView> {
                 height: 50,
                 width: double.infinity,
                 child: CustomButton(
+                  isloading: isloading,
                   onPressed: () {
-                    authcontroller.registerUser(
-                      context,
-                      nameController.text,
-                      numberController.text,
-                      passwordController.text,
-                    );
+                    if (_fomrKey.currentState!.validate()) {
+                      setState(() {
+                        isloading = true;
+                      });
+                      authcontroller.registerUser(
+                        context,
+                        nameController.text,
+                        numberController.text,
+                        passwordController.text,
+                      );
+                      setState(() {
+                        isloading = false;
+                      });
+                    }
                   },
                   btnText: "Create account",
                 ),
