@@ -4,6 +4,7 @@ List<QuestionModel> questions = [
   QuestionModel(
     id: 1,
     questionText: 'What is the capital of France?',
+    correctAnserId: "1",
     choices: [
       Choice(id: 1, questionId: 1, choiceText: 'Paris'),
       Choice(id: 2, questionId: 1, choiceText: 'Rome'),
@@ -14,6 +15,7 @@ List<QuestionModel> questions = [
   QuestionModel(
     id: 2,
     questionText: 'Who wrote "To Kill a Mockingbird"?',
+    correctAnserId: "6",
     choices: [
       Choice(id: 5, questionId: 2, choiceText: 'Harper Lee'),
       Choice(id: 6, questionId: 2, choiceText: 'Mark Twain'),
