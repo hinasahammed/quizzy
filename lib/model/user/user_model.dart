@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class UserModel {
@@ -7,13 +6,14 @@ class UserModel {
     required this.userName,
     required this.mobileNumber,
     required this.password,
+    this.isAdmin = false, 
   });
 
   final String id;
+  final bool isAdmin;
   final String userName;
   final String mobileNumber;
   final String password;
-
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -21,6 +21,7 @@ class UserModel {
       'userName': userName,
       'mobileNumber': mobileNumber,
       'password': password,
+      'isAdmin': isAdmin, 
     };
   }
 
@@ -30,10 +31,12 @@ class UserModel {
       userName: map['userName'] as String,
       mobileNumber: map['mobileNumber'] as String,
       password: map['password'] as String,
+      isAdmin: map['isAdmin'] as bool? ?? false,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }
