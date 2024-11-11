@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:quizzy/model/questionSummary/question_summary_model.dart';
 import 'package:quizzy/model/user/user_model.dart';
 import 'package:quizzy/repository/storageRepository/storage_repository.dart';
@@ -19,7 +18,6 @@ class LocalStorageRepository implements StorageRepository {
   @override
   Future<List<UserModel>> getAllUsers() async {
     final list = _sharedPreferences.getStringList(_userKey) ?? [];
-    log("$list");
     if (list.isEmpty) {
       return <UserModel>[];
     }
